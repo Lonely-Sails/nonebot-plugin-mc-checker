@@ -28,6 +28,6 @@ class Config(BaseModel):
                     raise ValueError(f'Invalid port in MINECRAFT_SERVERS: {name}={address}.')
                 if not verify_address_name(host):
                     raise ValueError(f'Invalid server address MINECRAFT_SERVERS: {name}={address}.')
-            elif verify_address_name(address):
+            elif not verify_address_name(address):
                 raise ValueError(f'Invalid server address MINECRAFT_SERVERS: {name}={address}.')
         return value

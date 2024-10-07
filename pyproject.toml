@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot_plugin_mc_watcher"
-version = "1.0.0"
+version = "1.0.1"
 description = "一个适用于监控多服务器的 Motd 工具。"
 license = "GPL3"
 authors = ["Lonely-Sails"]

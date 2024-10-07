@@ -34,7 +34,7 @@ async def _():
 
 
 @minecraft_matcher.handle()
-async def _(event: GroupMessageEvent, bot: Bot):
+async def _(event: GroupMessageEvent):
     message_lines = ['服务器查询结果：']
     servers_motd = await fetch_all_motd(config.servers)
     for server_name, motd in servers_motd.items():
