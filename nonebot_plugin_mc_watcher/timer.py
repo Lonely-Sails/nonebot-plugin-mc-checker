@@ -9,9 +9,11 @@ from .minecraft import fetch_all_motd
 
 
 async def timer(config: Config):
+    logger.debug('启动定时任务……')
     globals.servers_motd = await fetch_all_motd(config.minecraft_servers)
+    logger.debug('定时任务启动成功！')
     while True:
-        await asyncio.sleep(config.interval)
+        await asyncio.sleep(config.minecraft_update_interval)
         logger.debug('正在执行定时任务……')
         await task(config)
 
@@ -25,11 +27,12 @@ async def task(config: Config):
             break
     if not bot and not config.minecraft_broadcast_server:
         logger.warning('未找到可用机器人，无法进行服务器广播！')
-    for server_name, server_motd in await fetch_all_motd(config.minecraft_servers):
-        logger.debug(F'服务器 {server_name} 的信息为：{server_motd}')
+    servers_motd = await fetch_all_motd(config.minecraft_servers)
+    for server_name, server_motd in servers_motd.items():
+        logger.debug(F'服务器 [{server_name}] 的信息为：{server_motd}')
         memory_motd = globals.servers_motd.get(server_name)
         if server_motd is None and memory_motd:
-            logger.info(F'检测到服务器 {server_name} 已下线！')
+            logger.info(F'检测到服务器 [{server_name}] 已下线！')
             if config.minecraft_broadcast_server:
                 for group in config.minecraft_broadcast_groups:
                     await bot.send_group_msg(group_id=group, message=F'服务器 [{server_name}] 已下线！')
@@ -40,7 +43,7 @@ async def task(config: Config):
                     await bot.send_group_msg(group_id=group, message=F'服务器 [{server_name}] 已上线！')
         elif server_motd != memory_motd:
             message = F'服务器 [{server_name}] 信息已更新！'
-            logger.info(F'检测到服务器 {server_name} 信息已更新！')
+            logger.info(F'检测到服务器 [{server_name}] 信息已更新！')
             player_count = memory_motd['players']['online']
             max_player_count = server_motd['players']['max']
             current_player_count = server_motd['players']['online']
