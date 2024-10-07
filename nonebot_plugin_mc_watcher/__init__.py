@@ -28,6 +28,20 @@ async def _():
     task = asyncio.create_task(timer(config))
 
 
+@adapter.on_shutdown
+async def _():
+    task.cancel()
+
+
 @minecraft_matcher.handle()
 async def _(event: GroupMessageEvent, bot: Bot):
-    pass
+    message_lines = ['服务器查询结果：']
+    servers_motd = await fetch_all_motd(config.servers)
+    for server_name, motd in servers_motd.items():
+        if motd is not None:
+            max_players = motd['players']['max']
+            online_players = motd['players']['online']
+            message_lines.append(F'- {server_name}：在线 {online_players}/{max_players} 人')
+            continue
+        message_lines.append(F'- {server_name}：服务器已离线')
+    await minecraft_matcher.send('\n'.join(message_lines), at_sender=True)
