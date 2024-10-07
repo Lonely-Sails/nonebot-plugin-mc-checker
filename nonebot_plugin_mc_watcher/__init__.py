@@ -11,7 +11,8 @@ __plugin_meta__ = PluginMetadata(
     name='MinecraftWatcher',
     description='一个基于 Motd 监视 Minecraft 多个服务器状态的 NoneBot 插件。',
     usage='可以通过命令 /mc 或 /minecraft 进行查询。',
-    homepage='https://github.com/LonelySail/nonebot_plugin_mc_watcher',
+    homepage='https://github.com/Lonely-Sails/nonebot-plugin-mc-watcher',
+    type='application',
     config=Config,
     supported_adapters={'~onebot.v11'}
 )
