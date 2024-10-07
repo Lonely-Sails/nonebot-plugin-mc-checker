@@ -6,6 +6,7 @@ class Config(BaseModel):
     minecraft_servers: Dict[str, str]
     minecraft_update_interval: int = 30
     minecraft_broadcast_server: bool = True
+    minecraft_broadcast_player: bool = False
     minecraft_broadcast_groups: List[int] = []
 
     @field_validator('minecraft_servers')
