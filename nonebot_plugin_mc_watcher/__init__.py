@@ -37,13 +37,14 @@ async def _():
 @minecraft_matcher.handle()
 async def _(event: GroupMessageEvent):
     message_lines = ['服务器查询结果：']
-    servers_motd = await fetch_all_motd(config.servers)
+    servers_motd = await fetch_all_motd(config.minecraft_servers)
     for server_name, motd in servers_motd.items():
         if motd is not None:
+            ping = motd['ping']
             version = motd['version']['name']
             max_players = motd['players']['max']
             online_players = motd['players']['online']
-            message_lines.append(F'  {server_name}：在线')
+            message_lines.append(F'  {server_name}：在线  {ping}ms')
             message_lines.append(F'  - 在线玩家：{online_players}/{max_players}    版本：{version}')
             continue
         message_lines.append(F'  {server_name}：服务器已离线')

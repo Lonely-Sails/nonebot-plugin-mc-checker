@@ -1,5 +1,6 @@
 import json
 import asyncio
+from time import time
 from typing import Dict
 
 from mcproto.buffer import Buffer
@@ -21,6 +22,7 @@ async def fetch_all_motd(servers: Dict[str, str]):
 
 async def fetch_server_motd(host: str, port: int = 25565):
     try:
+        start_time = round(time() * 1000)
         connection_context = await TCPAsyncConnection.make_client((host, port), 5)
         async with connection_context as connection:
             handshake = Buffer()
@@ -40,11 +42,13 @@ async def fetch_server_motd(host: str, port: int = 25565):
             response_length = await connection.read_varint()
             response = Buffer(await connection.read(response_length))
             response.read_varint()
+            now_time = round(time() * 1000)
             motd_data = json.loads(response.read_utf())
             motd_data.pop('favicon')
             motd_data.pop('description')
+            motd_data.setdefault('ping', now_time - start_time)
             return motd_data
-    except TimeoutError:
+    except (ConnectionError, TimeoutError):
         return None
 
 
