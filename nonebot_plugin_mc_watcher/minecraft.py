@@ -44,8 +44,8 @@ async def fetch_server_motd(host: str, port: int = 25565):
             response.read_varint()
             now_time = round(time() * 1000)
             motd_data = json.loads(response.read_utf())
-            motd_data.pop('favicon')
-            motd_data.pop('description')
+            motd_data.pop('favicon', None)
+            motd_data.pop('description', None)
             motd_data.setdefault('ping', now_time - start_time)
             return motd_data
     except (ConnectionError, TimeoutError):
@@ -54,4 +54,4 @@ async def fetch_server_motd(host: str, port: int = 25565):
 
 if __name__ == '__main__':
     # print(asyncio.run(fetch_server_motd('lemonfate.cn')))
-    print(asyncio.run(fetch_server_motd('cn-qz-plc-1.ofalias.net', 56839)))
+    print(asyncio.run(fetch_server_motd('lemonfate.cn', 25565)))
