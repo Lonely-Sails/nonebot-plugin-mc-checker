@@ -48,10 +48,10 @@ async def task(config: Config):
             max_player_count = server_motd['players']['max']
             current_player_count = server_motd['players']['online']
             if player_count < current_player_count:
-                message = F'服务器 [{server_name}] 有玩家退出！当前共有 {current_player_count}/{max_player_count} 人。'
+                message = F'服务器 [{server_name}] 有玩家加入！当前共有 {current_player_count}/{max_player_count} 人。'
                 logger.info(F'检测到服务器 {server_name} 有新玩家加入！')
             elif player_count > current_player_count:
-                message = F'服务器 [{server_name}] 有玩家加入！当前共有 {current_player_count}/{max_player_count} 人。'
+                message = F'服务器 [{server_name}] 有玩家退出！当前共有 {current_player_count}/{max_player_count} 人。'
                 logger.info(F'检测到服务器 {server_name} 有玩家退出！')
             if config.minecraft_broadcast_player:
                 for group in config.minecraft_broadcast_groups:
